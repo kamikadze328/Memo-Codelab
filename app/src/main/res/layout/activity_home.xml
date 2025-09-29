@@ -20,7 +20,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include android:id="@+id/content_home" layout="@layout/content_home" />
+    <include
+        android:id="@+id/content_home"
+        layout="@layout/content_home" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

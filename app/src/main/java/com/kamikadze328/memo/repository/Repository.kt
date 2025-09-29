@@ -1,8 +1,8 @@
 package com.kamikadze328.memo.repository
 
-import androidx.room.Room
 import android.content.Context
 import androidx.annotation.WorkerThread
+import androidx.room.Room
 import com.kamikadze328.memo.model.Memo
 
 private const val DATABASE_NAME: String = "codelab"
@@ -15,7 +15,8 @@ internal object Repository : IMemoRepository {
     private lateinit var database: Database
 
     fun initialize(applicationContext: Context) {
-        database = Room.databaseBuilder(applicationContext, Database::class.java, DATABASE_NAME).build()
+        database =
+            Room.databaseBuilder(applicationContext, Database::class.java, DATABASE_NAME).build()
     }
 
     @WorkerThread

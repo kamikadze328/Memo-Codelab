@@ -1,10 +1,10 @@
 package com.kamikadze328.memo.view.home
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.recyclerview.widget.RecyclerView
 import com.kamikadze328.memo.databinding.RecyclerviewMemoBinding
 import com.kamikadze328.memo.model.Memo
 import kotlin.math.max
@@ -12,9 +12,11 @@ import kotlin.math.max
 /**
  * Adapter containing a set of memos.
  */
-internal class MemoAdapter(private val items: MutableList<Memo>,
-                           private val onClick: View.OnClickListener,
-                           private val onCheckboxChanged: CompoundButton.OnCheckedChangeListener) : RecyclerView.Adapter<MemoViewHolder>() {
+internal class MemoAdapter(
+    private val items: MutableList<Memo>,
+    private val onClick: View.OnClickListener,
+    private val onCheckboxChanged: CompoundButton.OnCheckedChangeListener
+) : RecyclerView.Adapter<MemoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewTypee: Int): MemoViewHolder {
         return MemoViewHolder(newItemViewBinding(parent))

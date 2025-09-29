@@ -68,7 +68,7 @@ internal class CreateMemo : AppCompatActivity() {
                 true
             }
 
-            else             -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -83,8 +83,10 @@ internal class CreateMemo : AppCompatActivity() {
                 setResult(RESULT_OK)
                 finish()
             } else {
-                memoTitleContainer.error = getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error = getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                memoTitleContainer.error =
+                    getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
+                memoDescription.error =
+                    getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
             }
         }
     }
