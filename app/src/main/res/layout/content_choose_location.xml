@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.kamikadze328.memo.view.create.location.ChooseLocation"
+    tools:context=".feature.location.ChooseLocationActivity"
     tools:showIn="@layout/activity_choose_location">
 
     <org.osmdroid.views.MapView

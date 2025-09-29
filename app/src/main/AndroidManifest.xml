@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".repository.App"
+        android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -26,7 +26,7 @@
             android:value="${applicationId}" />
 
         <activity
-            android:name="com.kamikadze328.memo.view.home.Home"
+            android:name="com.kamikadze328.memo.feature.home.HomeActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,22 +36,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kamikadze328.memo.view.create.CreateMemo"
+            android:name="com.kamikadze328.memo.feature.create.CreateMemoActivity"
             android:exported="false"
             android:label="@string/new_memo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.create.location.ChooseLocation"
+            android:name="com.kamikadze328.memo.feature.location.ChooseLocationActivity"
             android:exported="false"
             android:label="@string/choose_location_title"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.kamikadze328.memo.view.detail.ViewMemo"
+            android:name="com.kamikadze328.memo.feature.detail.ViewMemoActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".LocationService"
+            android:name=".background.LocationService"
             android:exported="false"
             android:foregroundServiceType="location" />
 
