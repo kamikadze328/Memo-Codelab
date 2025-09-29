@@ -2,6 +2,7 @@ package com.kamikadze328.memo.view.create
 
 import androidx.lifecycle.ViewModel
 import com.kamikadze328.memo.model.Memo
+import com.kamikadze328.memo.model.MemoLocation
 import com.kamikadze328.memo.repository.Repository
 import com.kamikadze328.memo.utils.coroutines.ScopeProvider
 import com.kamikadze328.memo.utils.extensions.empty
@@ -27,7 +28,26 @@ internal class CreateMemoViewModel : ViewModel() {
      * Call this method to update the memo. This is usually needed when the user changed his input.
      */
     fun updateMemo(title: String, description: String) {
-        memo = Memo(title = title, description = description, id = 0, reminderDate = 0, reminderLatitude = 0, reminderLongitude = 0, isDone = false)
+        memo = Memo(
+            title = title,
+            description = description,
+            id = 0,
+            reminderDate = 0,
+            reminderLatitude = 0,
+            reminderLongitude = 0,
+            isDone = false,
+            location = memo.location?.copy(),
+        )
+    }
+
+    fun updateMemoLocation(location: MemoLocation?) {
+        memo = memo.copy(
+            location = location,
+        )
+    }
+
+    fun getMemoLocation(): MemoLocation? {
+        return memo.location
     }
 
     /**
