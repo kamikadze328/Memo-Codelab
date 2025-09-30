@@ -68,7 +68,7 @@ class LocationService : Service() {
 
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (isFineLocationGranted() && isCoarseLocationGranted()) {
+        if (isFineLocationGranted()) {
             requestLocationUpdates()
 
             val notification = notificationHelper.createLocationServiceNotification()
@@ -83,12 +83,7 @@ class LocationService : Service() {
         return START_NOT_STICKY
     }
 
-    @RequiresPermission(
-        allOf = [
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ]
-    )
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION])
     private fun requestLocationUpdates() {
         val locationRequest = LocationRequest
             .Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL_MS)
