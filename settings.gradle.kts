@@ -20,4 +20,15 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Memo Codelab"
-include(":app")
+include(
+    ":app",
+    ":domain",
+    ":data",
+    ":core-android",
+    ":core-ui",
+    ":background-location",
+    ":feature-home",
+    ":feature-memo-details",
+    ":feature-memo-create",
+    ":feature-choose-location"
+)

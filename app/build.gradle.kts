@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -17,7 +17,6 @@ android {
         minSdk = 27
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -38,10 +37,6 @@ android {
     }
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 kotlin {
     target {
         compilerOptions {
@@ -53,21 +48,18 @@ kotlin {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation(libs.androidx.core.ktx)
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":core-android"))
+    implementation(project(":core-ui"))
+    implementation(project(":background-location"))
+    implementation(project(":feature-home"))
+    implementation(project(":feature-memo-create"))
+    implementation(project(":feature-memo-details"))
+    implementation(project(":feature-choose-location"))
+
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.google.material)
-    implementation(libs.osmdroid)
-    implementation(libs.play.services.location)
-    implementation(libs.androidx.preference)
 
-    // Lifecycle, LiveData и ViewModel
-    implementation(libs.bundles.lifecycle)
-
-    // Room
-    implementation(libs.bundles.room)
-    ksp(libs.androidx.room.compiler)
-
-    // Coroutines
-    implementation(libs.bundles.coroutines)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

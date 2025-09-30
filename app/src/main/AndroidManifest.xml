@@ -25,33 +25,46 @@
             android:name="osmdroid.userAgent"
             android:value="${applicationId}" />
 
+        <meta-data
+            android:name=".background.location.OsmdroidInitializer"
+            android:value="androidx.startup" />
+
         <activity
-            android:name="com.kamikadze328.memo.feature.home.HomeActivity"
+            android:name=".feature.home.HomeActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="home"
+                    android:scheme="codelab" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kamikadze328.memo.feature.create.CreateMemoActivity"
+            android:name=".feature.memo.create.CreateMemoActivity"
             android:exported="false"
             android:label="@string/new_memo"
+            android:parentActivityName=".feature.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.kamikadze328.memo.feature.location.ChooseLocationActivity"
+            android:name=".feature.choose.location.ChooseLocationActivity"
             android:exported="false"
             android:label="@string/choose_location_title"
+            android:parentActivityName=".feature.memo.create.CreateMemoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.kamikadze328.memo.feature.detail.ViewMemoActivity"
+            android:name=".feature.memo.details.ViewMemoActivity"
             android:exported="false"
+            android:parentActivityName=".feature.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".background.LocationService"
+            android:name=".background.location.LocationService"
             android:exported="false"
             android:foregroundServiceType="location" />
 

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_location_permissions_warning">Please grant all permissions for the location/notification. It`s necessary for the memo`s location feature to work</string>
+</resources>
