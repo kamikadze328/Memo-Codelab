@@ -34,7 +34,8 @@ internal class ViewMemo : AppCompatActivity() {
                     }
                 }
             }
-            val id = intent.getLongExtra(BUNDLE_MEMO_ID, -1)
+            val id = intent?.data?.getQueryParameter("id")?.toLongOrNull()
+                ?: intent.getLongExtra(BUNDLE_MEMO_ID, -1)
             model.loadMemo(id)
         }
     }

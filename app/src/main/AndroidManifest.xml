@@ -47,8 +47,21 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.kamikadze328.memo.view.detail.ViewMemo"
-            android:exported="false"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:exported="true"
+            android:parentActivityName=".view.home.Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="com.kamikadze328.memo"
+                    android:path="/detail"
+                    android:scheme="codelab" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".LocationService"

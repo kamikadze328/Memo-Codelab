@@ -2,7 +2,6 @@ package com.kamikadze328.memo
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
@@ -16,12 +15,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.kamikadze328.memo.model.Memo
 import com.kamikadze328.memo.repository.Repository
 import com.kamikadze328.memo.utils.coroutines.ScopeProvider
 import com.kamikadze328.memo.utils.permissions.isCoarseLocationGranted
 import com.kamikadze328.memo.utils.permissions.isFineLocationGranted
-import com.kamikadze328.memo.utils.permissions.isPostNotificationsGranted
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -53,7 +50,7 @@ class LocationService : Service() {
                     coroutineScope.launch {
                         locationProcessor.onLocationUpdate(
                             lastUserLocation = lastLocation,
-                            notifyLocationMemoNearby = ::notifyLocationMemoNearby
+                            notifyLocationMemoNearby = notificationHelper::showMemoLocatedNotification
                         )
                     }
                 } catch (e: Throwable) {
@@ -124,21 +121,4 @@ class LocationService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
-
-    private fun notifyLocationMemoNearby(memo: Memo) {
-        val notification = notificationHelper.createMemoLocatedNotification(memo)
-
-        showNotification(memo.id, notification)
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun showNotification(id: Long, notification: Notification) {
-        if (!isPostNotificationsGranted()
-            && !NotificationManagerCompat.from(this).areNotificationsEnabled()
-        ) {
-            return
-        }
-
-        NotificationManagerCompat.from(this).notify(id.toInt(), notification)
-    }
 }
