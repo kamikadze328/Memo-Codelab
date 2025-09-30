@@ -46,16 +46,16 @@ class LocationService : Service() {
             override fun onLocationResult(p0: LocationResult) {
                 val lastLocation = p0.lastLocation ?: return
 
-                try {
-                    coroutineScope.launch {
+                coroutineScope.launch {
+                    try {
                         locationProcessor.onLocationUpdate(
                             lastUserLocation = lastLocation,
                             notifyLocationMemoNearby = notificationHelper::showMemoLocatedNotification
                         )
+                    } catch (e: Throwable) {
+                        coroutineScope.ensureActive()
+                        Log.e(TAG, "Failed to process location update", e)
                     }
-                } catch (e: Throwable) {
-                    coroutineScope.ensureActive()
-                    Log.e(TAG, "Failed to process location update", e)
                 }
             }
         }
