@@ -18,7 +18,7 @@ internal class ChooseLocationViewModel : ViewModel() {
         _data.value = MemoLocation(latitude = latitude, longitude = longitude)
     }
 
-    fun initArgs(location: MemoLocation?) {
-        _data.value = location ?: return
+    fun initArgs(args: ChooseLocationArgs) {
+        _data.value = args.location ?: return
     }
 }

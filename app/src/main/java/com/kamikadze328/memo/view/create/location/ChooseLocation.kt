@@ -52,7 +52,10 @@ class ChooseLocation : AppCompatActivity() {
     }
 
     private fun finishWithResult() {
-        setResult(RESULT_OK, ChooseLocationContract.createResult(model.data.value))
+        setResult(
+            RESULT_OK,
+            ChooseLocationContract.createResult(ChooseLocationResult(model.data.value))
+        )
         finish()
     }
 

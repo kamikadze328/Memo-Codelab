@@ -4,38 +4,42 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.IntentCompat
-import com.kamikadze328.memo.model.MemoLocation
 
-class ChooseLocationContract : ActivityResultContract<MemoLocation?, MemoLocation?>() {
+class ChooseLocationContract : ActivityResultContract<ChooseLocationArgs, ChooseLocationResult>() {
     companion object {
         private const val EXTRA = "location"
 
-        fun getArgs(intent: Intent?): MemoLocation? {
+        fun getArgs(intent: Intent?): ChooseLocationArgs {
             return intent?.let {
                 IntentCompat.getParcelableExtra(
                     it,
                     EXTRA,
-                    MemoLocation::class.java
+                    ChooseLocationArgs::class.java
                 )
-            }
+            } ?: ChooseLocationArgs(location = null)
         }
 
-        fun createResult(output: MemoLocation): Intent {
+        fun createResult(output: ChooseLocationResult): Intent {
             return Intent().apply {
                 putExtra(EXTRA, output)
             }
         }
     }
 
-    override fun createIntent(context: Context, input: MemoLocation?): Intent {
+    override fun createIntent(context: Context, input: ChooseLocationArgs): Intent {
         return Intent(context, ChooseLocation::class.java).apply {
             putExtra(EXTRA, input)
         }
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): MemoLocation? {
-        return intent?.let { IntentCompat.getParcelableExtra(it, EXTRA, MemoLocation::class.java) }
+    override fun parseResult(resultCode: Int, intent: Intent?): ChooseLocationResult {
+        return intent?.let {
+            IntentCompat.getParcelableExtra(
+                it,
+                EXTRA,
+                ChooseLocationResult::class.java
+            )
+        }
+            ?: ChooseLocationResult(location = null)
     }
-
-
 }

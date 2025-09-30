@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kamikadze328.memo.R
 import com.kamikadze328.memo.databinding.ActivityCreateMemoBinding
 import com.kamikadze328.memo.utils.extensions.empty
+import com.kamikadze328.memo.view.create.location.ChooseLocationArgs
 import com.kamikadze328.memo.view.create.location.ChooseLocationContract
 
 /**
@@ -20,8 +21,8 @@ internal class CreateMemo : AppCompatActivity() {
     private lateinit var model: CreateMemoViewModel
 
     private val chooseLocationLauncher =
-        registerForActivityResult(ChooseLocationContract()) { location ->
-            model.updateMemoLocation(location)
+        registerForActivityResult(ChooseLocationContract()) { result ->
+            model.updateMemoLocation(result.location)
             updateLocationInfo()
         }
 
@@ -49,7 +50,11 @@ internal class CreateMemo : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.contentCreateMemo.chooseLocationButton.setOnClickListener {
-            chooseLocationLauncher.launch(model.getMemoLocation())
+            chooseLocationLauncher.launch(
+                ChooseLocationArgs(
+                    location = model.getMemoLocation(),
+                )
+            )
         }
     }
 
@@ -68,7 +73,7 @@ internal class CreateMemo : AppCompatActivity() {
                 true
             }
 
-            else             -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -83,8 +88,10 @@ internal class CreateMemo : AppCompatActivity() {
                 setResult(RESULT_OK)
                 finish()
             } else {
-                memoTitleContainer.error = getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error = getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                memoTitleContainer.error =
+                    getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
+                memoDescription.error =
+                    getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
             }
         }
     }
