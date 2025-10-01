@@ -39,12 +39,11 @@ internal class CreateMemoViewModel @Inject constructor(
      * Call this method to update the memo. This is usually needed when the user changed his input.
      */
     fun updateMemo(title: String, description: String) {
-        memo = Memo(
+        memo = memo.copy(
             title = title,
             description = description,
             id = 0,
             reminderDate = 0,
-            reminderLocation = null,
             isDone = false,
         )
     }
@@ -62,7 +61,8 @@ internal class CreateMemoViewModel @Inject constructor(
     /**
      * @return true if the title and content are not blank; false otherwise.
      */
-    fun isMemoValid(): Boolean = memo.title.isNotBlank() && memo.description.isNotBlank()
+    fun isMemoValid(): Boolean =
+        memo.title.isNotBlank() && memo.description.isNotBlank() && memo.reminderLocation != null
 
     /**
      * @return true if the memo text is blank, false otherwise.
@@ -73,4 +73,9 @@ internal class CreateMemoViewModel @Inject constructor(
      * @return true if the memo title is blank, false otherwise.
      */
     fun hasTitleError() = memo.title.isBlank()
+
+    /**
+     * @return true if the memo location is null, false otherwise.
+     */
+    fun hasLocationError() = memo.reminderLocation == null
 }

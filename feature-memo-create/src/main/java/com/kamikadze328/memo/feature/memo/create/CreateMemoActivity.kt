@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import com.kamikadze328.memo.feature.choose.location.ChooseLocationArgs
 import com.kamikadze328.memo.feature.choose.location.ChooseLocationContract
 import com.kamikadze328.memo.feature.memo.create.databinding.ActivityCreateMemoBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,8 +21,8 @@ class CreateMemoActivity : AppCompatActivity() {
     private val viewModel: CreateMemoViewModel by viewModels()
 
     private val chooseLocationLauncher =
-        registerForActivityResult(ChooseLocationContract()) { location ->
-            viewModel.updateMemoLocation(location)
+        registerForActivityResult(ChooseLocationContract()) { result ->
+            viewModel.updateMemoLocation(result.location)
             updateLocationInfo()
         }
 
@@ -48,7 +49,7 @@ class CreateMemoActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.contentCreateMemo.chooseLocationButton.setOnClickListener {
-            chooseLocationLauncher.launch(viewModel.getMemoLocation())
+            chooseLocationLauncher.launch(ChooseLocationArgs(viewModel.getMemoLocation()))
         }
     }
 
@@ -84,8 +85,12 @@ class CreateMemoActivity : AppCompatActivity() {
             } else {
                 memoTitleContainer.error =
                     getErrorMessage(viewModel.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error =
+                memoDescriptionContainer.error =
                     getErrorMessage(viewModel.hasTextError(), R.string.memo_text_empty_error)
+
+                if (viewModel.hasLocationError()) {
+                    chooseLocationText.text = getString(R.string.memo_location_empty_error)
+                }
             }
         }
     }

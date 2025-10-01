@@ -1,13 +1,11 @@
 package com.kamikadze328.memo.background.location
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -15,9 +13,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.kamikadze328.memo.core.android.coroutines.IDispatcherProvider
-import com.kamikadze328.memo.core.android.permissions.isPostNotificationsGranted
 import com.kamikadze328.memo.domain.model.Memo
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -28,8 +24,6 @@ import javax.inject.Inject
 internal class LocationPresenter @Inject constructor(
     private val notificationHelper: LocationNotificationHelper,
     private val locationUpdateProcessor: LocationUpdateProcessor,
-    @param:ApplicationContext
-    private val applicationContext: Context,
     dispatcherProvider: IDispatcherProvider,
 ) {
     companion object {
@@ -68,28 +62,10 @@ internal class LocationPresenter @Inject constructor(
     }
 
     private fun notifyLocationMemoNearby(memo: Memo) {
-        val notification = notificationHelper.createMemoLocatedNotification(memo)
-
-        showNotification(memo.id, notification)
+        notificationHelper.showMemoLocatedNotification(memo)
     }
 
-    @SuppressLint("MissingPermission")
-    private fun showNotification(id: Long, notification: Notification) {
-        if (!applicationContext.isPostNotificationsGranted()
-            && !NotificationManagerCompat.from(applicationContext).areNotificationsEnabled()
-        ) {
-            return
-        }
-
-        NotificationManagerCompat.from(applicationContext).notify(id.toInt(), notification)
-    }
-
-    @RequiresPermission(
-        allOf = [
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ]
-    )
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION])
     fun requestLocationUpdates() {
         val locationRequest = LocationRequest
             .Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL_MS)

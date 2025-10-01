@@ -29,7 +29,8 @@ class ChooseLocationActivity : AppCompatActivity() {
         binding = ActivityChooseLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        viewModel.initArgs(ChooseLocationContract.getArgs(intent))
+        val args = ChooseLocationContract.getArgs(intent)
+        viewModel.initArgs(args)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -38,11 +39,13 @@ class ChooseLocationActivity : AppCompatActivity() {
                 }
             }
         }
-        initMap()
-        initListeners()
+        initMap(args)
+        initListeners(args)
     }
 
-    private fun initListeners() {
+    private fun initListeners(args: ChooseLocationArgs) {
+        if (!args.canChooseLocation) return
+
         binding.contentChooseLocation.save.setOnClickListener {
             finishWithResult()
         }
@@ -53,17 +56,22 @@ class ChooseLocationActivity : AppCompatActivity() {
     }
 
     private fun finishWithResult() {
-        setResult(RESULT_OK, ChooseLocationContract.createResult(viewModel.data.value))
+        setResult(
+            RESULT_OK,
+            ChooseLocationContract.createResult(ChooseLocationResult(viewModel.data.value))
+        )
         finish()
     }
 
-    private fun initMap() {
+    private fun initMap(args: ChooseLocationArgs) {
         with(binding.contentChooseLocation.map) {
             setTileSource(TileSourceFactory.MAPNIK)
             setMultiTouchControls(true)
             controller.setZoom(15.0)
             val location = viewModel.data.value
             controller.setCenter(GeoPoint(location.latitude, location.longitude))
+
+            if (!args.canChooseLocation) return
             val mapEventsReceiver = object : MapEventsReceiver {
                 override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                     if (p != null) {

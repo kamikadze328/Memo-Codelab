@@ -5,4 +5,5 @@
     <string name="memo_text_empty_error">Please provide a memo description</string>
     <string name="action_show_all">Show All</string>
     <string name="action_show_open">Show Open</string>
+    <string name="memo_location_empty_error">Please provide a memo location</string>
 </resources>

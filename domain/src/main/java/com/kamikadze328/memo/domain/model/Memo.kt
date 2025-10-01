@@ -15,6 +15,6 @@ data class Memo(
     var title: String,
     var description: String,
     var reminderDate: Long,
-    var reminderLocation: MemoLocation?,
+    val reminderLocation: MemoLocation?,
     var isDone: Boolean,
 )

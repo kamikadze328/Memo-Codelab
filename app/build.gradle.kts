@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":feature-choose-location"))
 
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.startup)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

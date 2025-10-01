@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdk = 27
     }
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -24,11 +24,11 @@ android {
 }
 
 dependencies {
-    implementation((project(":domain")))
-    implementation((project(":core-android")))
-    implementation((project(":core-ui")))
-    implementation((project(":feature-memo-create")))
-    implementation((project(":feature-memo-details")))
+    implementation(project(":domain"))
+    implementation(project(":core-android"))
+    implementation(project(":core-ui"))
+    implementation(project(":feature-memo-create"))
+    implementation(project(":feature-memo-details"))
     implementation(project(":background-location"))
 
     implementation(libs.androidx.core.ktx)

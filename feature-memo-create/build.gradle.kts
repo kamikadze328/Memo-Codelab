@@ -20,10 +20,10 @@ android {
 }
 
 dependencies {
-    implementation((project(":domain")))
-    implementation((project(":core-android")))
-    implementation((project(":core-ui")))
-    implementation((project(":feature-choose-location")))
+    implementation(project(":domain"))
+    implementation(project(":core-android"))
+    implementation(project(":core-ui"))
+    implementation(project(":feature-choose-location"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

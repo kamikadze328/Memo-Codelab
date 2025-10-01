@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -20,9 +21,9 @@ android {
 }
 
 dependencies {
-    implementation((project(":domain")))
-    implementation((project(":core-android")))
-    implementation((project(":core-ui")))
+    implementation(project(":domain"))
+    implementation(project(":core-android"))
+    implementation(project(":core-ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
