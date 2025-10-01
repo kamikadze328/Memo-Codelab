@@ -60,6 +60,7 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.lifecycle.process)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

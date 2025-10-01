@@ -2,8 +2,10 @@ package com.kamikadze328.memo.feature.home
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -45,6 +47,7 @@ class HomeActivity : AppCompatActivity() {
                 startLocationService()
             } else {
                 toast(getString(R.string.no_location_permissions_warning))
+                openSettings()
             }
         }
 
@@ -169,5 +172,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            .apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+        startActivity(intent)
     }
 }

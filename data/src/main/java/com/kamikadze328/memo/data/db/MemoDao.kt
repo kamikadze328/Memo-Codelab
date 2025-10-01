@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.kamikadze328.memo.data.db.entity.MemoDb
+import kotlinx.coroutines.flow.Flow
 
 /**
  * The Dao representation of a Memo.
@@ -23,6 +24,12 @@ internal interface MemoDao {
      */
     @Query("SELECT * FROM memo WHERE isDone = 0")
     suspend fun getOpen(): List<MemoDb>
+
+    /**
+     * @return a flow of all memos that are currently in the database and have not yet been marked as "done".
+     */
+    @Query("SELECT * FROM memo WHERE isDone = 0")
+    fun collectOpened(): Flow<List<MemoDb>>
 
     /**
      * Inserts the given Memo into the database. We currently do not support updating of memos.

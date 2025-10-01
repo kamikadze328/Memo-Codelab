@@ -13,3 +13,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 }
+
+dependencies {
+    implementation(libs.bundles.coroutines)
+}

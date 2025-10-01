@@ -13,6 +13,8 @@ preference = "1.2.1"
 startup = "1.2.0"
 hilt = "2.57.2"
 activityKtx = "1.11.0"
+coroutines = "1.10.2"
+lifecycle = "2.9.4"
 
 [libraries]
 # AndroidX
@@ -25,12 +27,17 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 
 # Google
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+
+# KotlinX
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 # 3-rd party
 osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }
@@ -46,3 +53,4 @@ android-library = { id = "com.android.library", version.ref = "androidGradlePlug
 
 [bundles]
 room = ["androidx-room-runtime", "androidx-room-ktx"]
+coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
