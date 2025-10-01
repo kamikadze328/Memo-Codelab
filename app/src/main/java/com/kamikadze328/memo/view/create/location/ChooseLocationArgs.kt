@@ -7,4 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ChooseLocationArgs(
     val location: MemoLocation?,
+    val canChooseLocation: Boolean = true,
 ): Parcelable
