@@ -1,6 +1,5 @@
 package com.kamikadze328.memo.repository
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.kamikadze328.memo.model.Memo
@@ -11,10 +10,7 @@ import com.kamikadze328.memo.model.Memo
 @Database(
     entities = [Memo::class],
     version = 2,
-    exportSchema = true,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2)
-    ]
+    exportSchema = false,
 )
 internal abstract class Database : RoomDatabase() {
 

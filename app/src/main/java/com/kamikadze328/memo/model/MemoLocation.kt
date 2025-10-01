@@ -12,8 +12,8 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class MemoLocation(
-    @ColumnInfo(name = "latitude")
+    @ColumnInfo(name = "reminderLatitude")
     val latitude: Double,
-    @ColumnInfo(name = "longitude")
+    @ColumnInfo(name = "reminderLongitude")
     val longitude: Double,
 ) : Parcelable

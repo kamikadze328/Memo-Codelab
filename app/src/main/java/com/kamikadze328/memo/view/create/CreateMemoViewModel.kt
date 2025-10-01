@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
  */
 internal class CreateMemoViewModel : ViewModel() {
 
-    private var memo = Memo(0, String.empty(), String.empty(), 0, 0, 0, false)
+    private var memo = Memo(0, String.empty(), String.empty(), 0, false)
 
     /**
      * Saves the memo in it's current state.
@@ -33,8 +33,6 @@ internal class CreateMemoViewModel : ViewModel() {
             description = description,
             id = 0,
             reminderDate = 0,
-            reminderLatitude = 0,
-            reminderLongitude = 0,
             isDone = false,
             location = memo.location?.copy(),
         )
