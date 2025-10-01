@@ -17,11 +17,12 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.kamikadze328.memo.repository.Repository
 import com.kamikadze328.memo.utils.coroutines.ScopeProvider
-import com.kamikadze328.memo.utils.permissions.isCoarseLocationGranted
 import com.kamikadze328.memo.utils.permissions.isFineLocationGranted
+import com.kamikadze328.memo.utils.permissions.isPostNotificationsGranted
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 
 class LocationService : Service() {
 
@@ -30,6 +31,8 @@ class LocationService : Service() {
         private const val LOCATION_REQUEST_INTERVAL_MS = 10_000L
         private const val LOCATION_REQUEST_DEBOUNCE_MS = 5_000L
         private const val LOCATION_REQUEST_MIN_UPDATES_METERS = 10.0f
+
+        val isRunning = AtomicBoolean(false)
     }
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
@@ -63,24 +66,26 @@ class LocationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning.set(true)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (isFineLocationGranted()) {
-            requestLocationUpdates()
-
-            val notification = notificationHelper.createLocationServiceNotification()
-            startForeground(
-                LocationNotificationHelper.NOTIFICATION_LOCATION_SERVICE_ID,
-                notification
-            )
-        } else {
+        if (!isFineLocationGranted() || !isPostNotificationsGranted()) {
             stopSelf()
+            return START_NOT_STICKY
         }
 
-        return START_NOT_STICKY
+        val notification = notificationHelper.createLocationServiceNotification()
+        startForeground(
+            LocationNotificationHelper.NOTIFICATION_LOCATION_SERVICE_ID,
+            notification
+        )
+
+        requestLocationUpdates()
+
+        return START_STICKY
     }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION])
@@ -112,7 +117,7 @@ class LocationService : Service() {
         }
 
         super.onDestroy()
-
+        isRunning.set(false)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

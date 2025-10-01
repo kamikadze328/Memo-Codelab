@@ -1,7 +1,13 @@
 package com.kamikadze328.memo.repository
 
 import android.app.Application
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
+import com.kamikadze328.memo.LocationServiceStartingProcessor
+import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 
 /**
@@ -12,6 +18,15 @@ internal class App : Application() {
         super.onCreate()
         Repository.initialize(this)
         initOsmDroid()
+        initLocationService()
+    }
+
+    private fun initLocationService() {
+        ProcessLifecycleOwner.get().lifecycleScope.launch {
+            ProcessLifecycleOwner.get().repeatOnLifecycle(Lifecycle.State.STARTED) {
+                LocationServiceStartingProcessor.observeAndManageLocationService(applicationContext)
+            }
+        }
     }
 
     private fun initOsmDroid() {
