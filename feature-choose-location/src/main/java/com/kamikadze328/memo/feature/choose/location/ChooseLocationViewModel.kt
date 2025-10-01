@@ -15,14 +15,26 @@ internal class ChooseLocationViewModel @Inject constructor() : ViewModel() {
         private val DEFAULT_LOCATION = BATUMI_LOCATION
     }
 
-    private val _data = MutableStateFlow(DEFAULT_LOCATION)
-    val data: StateFlow<MemoLocation> = _data.asStateFlow()
+    private val _data = MutableStateFlow(
+        ChooseLocationUiState(
+            location = DEFAULT_LOCATION,
+            canChoose = false,
+            initialLocation = DEFAULT_LOCATION
+        )
+    )
+    val data: StateFlow<ChooseLocationUiState> = _data.asStateFlow()
 
-    fun updateLocation(latitude: Double, longitude: Double) {
-        _data.value = MemoLocation(latitude = latitude, longitude = longitude)
+    fun updateLocation(memoLocation: MemoLocation) {
+        _data.value = _data.value.copy(
+            location = memoLocation
+        )
     }
 
     fun initArgs(args: ChooseLocationArgs) {
-        _data.value = args.location ?: return
+        _data.value = _data.value.copy(
+            canChoose = args.canChooseLocation,
+            initialLocation = args.location,
+            location = args.location ?: DEFAULT_LOCATION,
+        )
     }
 }

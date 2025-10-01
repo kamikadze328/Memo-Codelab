@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -35,4 +36,8 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.bundles.compose.debug)
 }
