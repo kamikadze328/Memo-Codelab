@@ -90,8 +90,11 @@ internal class CreateMemo : AppCompatActivity() {
             } else {
                 memoTitleContainer.error =
                     getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error =
+                memoDescriptionContainer.error =
                     getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                if (model.hasLocationError()) {
+                    chooseLocationText.text = getString(R.string.memo_location_empty_error)
+                }
             }
         }
     }

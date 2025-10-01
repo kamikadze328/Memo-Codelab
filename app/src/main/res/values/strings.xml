@@ -9,6 +9,7 @@
     <string name="action_save">Save</string>
     <string name="memo_title_empty_error">Please provide a title for this memo</string>
     <string name="memo_text_empty_error">Please provide a memo description</string>
+    <string name="memo_location_empty_error">Please provide a memo location</string>
     <string name="choose_location">Choose location</string>
     <string name="see_location">Location</string>
     <string name="save_coordinates">Save</string>

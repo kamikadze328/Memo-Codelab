@@ -51,7 +51,8 @@ internal class CreateMemoViewModel : ViewModel() {
     /**
      * @return true if the title and content are not blank; false otherwise.
      */
-    fun isMemoValid(): Boolean = memo.title.isNotBlank() && memo.description.isNotBlank()
+    fun isMemoValid(): Boolean =
+        memo.title.isNotBlank() && memo.description.isNotBlank() && memo.location != null
 
     /**
      * @return true if the memo text is blank, false otherwise.
@@ -62,4 +63,9 @@ internal class CreateMemoViewModel : ViewModel() {
      * @return true if the memo title is blank, false otherwise.
      */
     fun hasTitleError() = memo.title.isBlank()
+
+    /**
+     * @return true if the memo location is null, false otherwise.
+     */
+    fun hasLocationError() = memo.location == null
 }
