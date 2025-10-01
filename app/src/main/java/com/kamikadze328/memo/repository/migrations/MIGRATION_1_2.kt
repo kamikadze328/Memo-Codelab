@@ -21,7 +21,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
         db.execSQL(
             """
-            INSERT INTO `memo_new` (
+            INSERT INTO `memo_temp` (
                 `id`, `title`, `description`, `reminderDate`, `isDone`,
                 `reminderLatitude`, `reminderLongitude`
             )
