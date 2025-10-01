@@ -6,6 +6,9 @@ import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.domain.model.MemoLocation
 import com.kamikadze328.memo.domain.repository.IMemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,65 +20,53 @@ internal class CreateMemoViewModel @Inject constructor(
     private val repository: IMemoRepository,
 ) : ViewModel() {
 
-    private var memo = Memo(
-        id = 0,
-        title = "",
-        description = "",
-        reminderDate = 0,
-        reminderLocation = null,
-        isDone = false,
-    )
+    private var _memo = MutableStateFlow(Memo.EMPTY)
+    val data: StateFlow<Memo> = _memo.asStateFlow()
 
     /**
      * Saves the memo in it's current state.
      */
     fun saveMemo() {
         viewModelScope.launch {
-            repository.saveMemo(memo)
+            repository.saveMemo(data.value)
         }
     }
 
-    /**
-     * Call this method to update the memo. This is usually needed when the user changed his input.
-     */
-    fun updateMemo(title: String, description: String) {
-        memo = memo.copy(
-            title = title,
-            description = description,
-            id = 0,
-            reminderDate = 0,
-            isDone = false,
+    fun onNewTitleValue(title: String?) {
+        _memo.value = _memo.value.copy(
+            title = title.orEmpty(),
         )
     }
 
-    fun updateMemoLocation(location: MemoLocation?) {
-        memo = memo.copy(
+    fun onNewDescriptionValue(description: String?) {
+        _memo.value = _memo.value.copy(
+            description = description.orEmpty(),
+        )
+    }
+
+    fun onNewMemoLocation(location: MemoLocation?) {
+        _memo.value = _memo.value.copy(
             reminderLocation = location,
         )
-    }
-
-    fun getMemoLocation(): MemoLocation? {
-        return memo.reminderLocation
     }
 
     /**
      * @return true if the title and content are not blank; false otherwise.
      */
-    fun isMemoValid(): Boolean =
-        memo.title.isNotBlank() && memo.description.isNotBlank() && memo.reminderLocation != null
+    fun isMemoValid(): Boolean = !hasTextError() && !hasTitleError() && !hasLocationError()
 
     /**
      * @return true if the memo text is blank, false otherwise.
      */
-    fun hasTextError() = memo.description.isBlank()
+    fun hasTextError() = data.value.description.isBlank()
 
     /**
      * @return true if the memo title is blank, false otherwise.
      */
-    fun hasTitleError() = memo.title.isBlank()
+    fun hasTitleError() = data.value.title.isBlank()
 
     /**
      * @return true if the memo location is null, false otherwise.
      */
-    fun hasLocationError() = memo.reminderLocation == null
+    fun hasLocationError() = data.value.reminderLocation == null
 }

@@ -11,10 +11,21 @@ package com.kamikadze328.memo.domain.model
  * @param isDone Indicates whether the memo is marked as done.
  */
 data class Memo(
-    var id: Long,
-    var title: String,
-    var description: String,
-    var reminderDate: Long,
+    val id: Long,
+    val title: String,
+    val description: String,
+    val reminderDate: Long,
     val reminderLocation: MemoLocation?,
-    var isDone: Boolean,
-)
+    val isDone: Boolean,
+) {
+    companion object {
+        val EMPTY = Memo(
+            id = 0,
+            title = "",
+            description = "",
+            reminderDate = 0,
+            reminderLocation = null,
+            isDone = false,
+        )
+    }
+}

@@ -6,10 +6,16 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.feature.choose.location.ChooseLocationArgs
 import com.kamikadze328.memo.feature.choose.location.ChooseLocationContract
 import com.kamikadze328.memo.feature.memo.create.databinding.ActivityCreateMemoBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Activity that allows a user to create a new Memo.
@@ -22,8 +28,7 @@ class CreateMemoActivity : AppCompatActivity() {
 
     private val chooseLocationLauncher =
         registerForActivityResult(ChooseLocationContract()) { result ->
-            viewModel.updateMemoLocation(result.location)
-            updateLocationInfo()
+            viewModel.onNewMemoLocation(result.location)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,24 +37,48 @@ class CreateMemoActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        setupClickListeners()
-        initData()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.data.collect { uiState ->
+                    updateUI(uiState)
+                }
+            }
+        }
+
+        initData(viewModel.data.value)
+        setupListeners()
     }
 
-    private fun initData() {
-        updateLocationInfo()
+    private fun updateUI(memo: Memo) {
+        updateLocationInfo(memo)
     }
 
-    private fun updateLocationInfo() {
+    private fun initData(memo: Memo) {
+        with(binding.contentCreateMemo) {
+            memoTitle.setText(memo.title)
+            memoDescription.setText(memo.description)
+        }
+        updateLocationInfo(memo)
+    }
+
+    private fun updateLocationInfo(memo: Memo) {
         with(binding.contentCreateMemo) {
             chooseLocationText.text =
-                viewModel.getMemoLocation()?.let { "${it.latitude}, ${it.longitude}" }
+                memo.reminderLocation?.let { "${it.latitude}, ${it.longitude}" }
         }
     }
 
-    private fun setupClickListeners() {
-        binding.contentCreateMemo.chooseLocationButton.setOnClickListener {
-            chooseLocationLauncher.launch(ChooseLocationArgs(viewModel.getMemoLocation()))
+    private fun setupListeners() {
+        with(binding.contentCreateMemo) {
+            chooseLocationButton.setOnClickListener {
+                chooseLocationLauncher.launch(ChooseLocationArgs(viewModel.data.value.reminderLocation))
+            }
+            memoTitle.doAfterTextChanged {
+                viewModel.onNewTitleValue(it?.toString())
+            }
+            memoDescription.doAfterTextChanged {
+                viewModel.onNewDescriptionValue(it?.toString())
+            }
         }
     }
 
@@ -76,8 +105,7 @@ class CreateMemoActivity : AppCompatActivity() {
      * Saves the memo if the input is valid; otherwise shows the corresponding error messages.
      */
     private fun saveMemo() {
-        binding.contentCreateMemo.run {
-            viewModel.updateMemo(memoTitle.text.toString(), memoDescription.text.toString())
+        with(binding.contentCreateMemo) {
             if (viewModel.isMemoValid()) {
                 viewModel.saveMemo()
                 setResult(RESULT_OK)
