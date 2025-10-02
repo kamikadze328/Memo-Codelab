@@ -53,19 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.memo.create.CreateMemoActivity"
-            android:exported="false"
-            android:label="@string/new_memo"
-            android:parentActivityName=".feature.home.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".feature.choose.location.ChooseLocationActivity"
-            android:exported="false"
-            android:label="@string/choose_location_title"
-            android:parentActivityName=".feature.memo.create.CreateMemoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".feature.memo.details.ViewMemoActivity"
+            android:name=".feature.memo.details.MemoDetailsActivity"
             android:exported="true"
             android:parentActivityName=".feature.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -81,6 +69,12 @@
                     android:scheme="codelab" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".feature.choose.location.ChooseLocationActivity"
+            android:exported="false"
+            android:label="@string/choose_location_title"
+            android:parentActivityName=".feature.memo.details.MemoDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".background.location.LocationService"

@@ -30,11 +30,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
-    }
 }
 
 kotlin {
@@ -54,7 +49,6 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":background-location"))
     implementation(project(":feature-home"))
-    implementation(project(":feature-memo-create"))
     implementation(project(":feature-memo-details"))
     implementation(project(":feature-choose-location"))
 

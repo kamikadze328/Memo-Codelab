@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="location_data">%f %f</string>
+    <string name="create_memo_title">Create Memo</string>
+    <string name="view_memo_title">View Memo</string>
+    <string name="action_save">SAVE</string>
+    <string name="memo_text">Text</string>
+    <string name="memo_title">Title</string>
+    <string name="choose_location">Choose location</string>
     <string name="see_location">Location</string>
+    <string name="memo_title_empty_error">Please provide a title for this memo</string>
+    <string name="memo_text_empty_error">Please provide a memo description</string>
+    <string name="memo_location_empty_error">Please provide a memo location</string>
 </resources>

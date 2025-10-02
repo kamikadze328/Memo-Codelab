@@ -24,7 +24,6 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core-android"))
     implementation(project(":core-ui"))
-    implementation(project(":feature-memo-create"))
     implementation(project(":feature-memo-details"))
     implementation(project(":background-location"))
 

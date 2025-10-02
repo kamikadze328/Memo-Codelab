@@ -1,7 +1,6 @@
 package com.kamikadze328.memo.feature.home.composable
 
 import android.Manifest
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -48,8 +47,8 @@ import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.feature.home.HomeUiState
 import com.kamikadze328.memo.feature.home.HomeViewModel
 import com.kamikadze328.memo.feature.home.R
-import com.kamikadze328.memo.feature.memo.create.CreateMemoActivity
-import com.kamikadze328.memo.feature.memo.details.ViewMemoActivity
+import com.kamikadze328.memo.feature.memo.details.MemoDetailsArgs
+import com.kamikadze328.memo.feature.memo.details.MemoDetailsContract
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -58,16 +57,12 @@ internal fun HomeUi(
     viewModel: HomeViewModel = viewModel(),
 ) {
     val context = LocalContext.current
-    val createMemoLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
+    val createMemoLauncher = rememberLauncherForActivityResult(MemoDetailsContract()) { isSuccess ->
+        if (isSuccess) {
             viewModel.refreshMemos()
         }
     }
-    val viewMemoLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {}
+    val viewMemoLauncher = rememberLauncherForActivityResult(MemoDetailsContract()) {}
 
     val permissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -89,14 +84,16 @@ internal fun HomeUi(
         uiState = uiState.value,
         onClickMemo = {
             viewMemoLauncher.launch(
-                Intent(context, ViewMemoActivity::class.java).apply {
-                    putExtra(ViewMemoActivity.BUNDLE_MEMO_ID, it.id)
-                }
+                MemoDetailsArgs(
+                    openingType = MemoDetailsArgs.OpeningType.View(it.id)
+                )
             )
         },
         onAddMemo = {
             createMemoLauncher.launch(
-                Intent(context, CreateMemoActivity::class.java)
+                MemoDetailsArgs(
+                    openingType = MemoDetailsArgs.OpeningType.CreateNew
+                )
             )
         },
         onShowAllClick = viewModel::onShowAllClick,

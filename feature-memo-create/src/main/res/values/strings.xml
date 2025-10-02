@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="action_save">Save</string>
-    <string name="memo_title_empty_error">Please provide a title for this memo</string>
-    <string name="memo_text_empty_error">Please provide a memo description</string>
-    <string name="memo_location_empty_error">Please provide a memo location</string>
-</resources>

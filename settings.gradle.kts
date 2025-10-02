@@ -29,6 +29,5 @@ include(
     ":background-location",
     ":feature-home",
     ":feature-memo-details",
-    ":feature-memo-create",
     ":feature-choose-location"
 )

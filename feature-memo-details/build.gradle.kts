@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -13,24 +15,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":core-android"))
     implementation(project(":core-ui"))
     implementation(project(":feature-choose-location"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.google.material)
-    implementation(libs.androidx.activity.ktx)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.bundles.compose.debug)
 }
