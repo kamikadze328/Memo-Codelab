@@ -74,6 +74,7 @@ internal class LocationNotificationHelper(private val context: Context) {
             .setContentText(context.getString(R.string.location_notification_text))
             .setSmallIcon(R.drawable.ic_location_notification_24)
             .setContentIntent(makeHomeIntent())
+            .setSilent(true)
             .setPriority(NotificationManager.IMPORTANCE_LOW)
             .build()
     }

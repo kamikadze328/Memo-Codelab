@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.kamikadze328.memo.repository.Repository
+import com.kamikadze328.memo.utils.permissions.isFineLocationGranted
+import com.kamikadze328.memo.utils.permissions.isPostNotificationsGranted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -27,7 +29,13 @@ object LocationServiceStartingProcessor {
     }
 
     private fun startService(context: Context) {
-        if (LocationService.isRunning.get()) return
+        if (
+            !context.isFineLocationGranted() ||
+            !context.isPostNotificationsGranted() ||
+            LocationService.isRunning.get()
+        ) {
+            return
+        }
 
         ContextCompat.startForegroundService(
             context, Intent(context, LocationService::class.java)
