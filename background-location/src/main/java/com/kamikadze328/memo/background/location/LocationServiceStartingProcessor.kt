@@ -26,6 +26,4 @@ class LocationServiceStartingProcessor @Inject constructor(
                 }
             }
     }
-
-
 }

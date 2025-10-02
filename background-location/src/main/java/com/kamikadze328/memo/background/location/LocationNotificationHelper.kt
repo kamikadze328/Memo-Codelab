@@ -78,6 +78,7 @@ internal class LocationNotificationHelper @Inject constructor(
             .setContentText(applicationContext.getString(R.string.location_notification_text))
             .setSmallIcon(R.drawable.ic_location_notification_24)
             .setContentIntent(makeHomeIntent())
+            .setSilent(true)
             .setPriority(NotificationManager.IMPORTANCE_LOW)
             .build()
     }

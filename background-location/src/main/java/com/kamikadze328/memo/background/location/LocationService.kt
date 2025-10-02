@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.kamikadze328.memo.core.android.permissions.isFineLocationGranted
+import com.kamikadze328.memo.core.android.permissions.isPostNotificationsGranted
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -17,7 +18,12 @@ class LocationService : Service() {
     companion object {
         private val isRunning = AtomicBoolean(false)
         internal fun startService(context: Context) {
-            if (isRunning.get()) return
+            if (!context.isFineLocationGranted() ||
+                !context.isPostNotificationsGranted() ||
+                isRunning.get()
+            ) {
+                return
+            }
 
             ContextCompat.startForegroundService(
                 context, Intent(context, LocationService::class.java)
