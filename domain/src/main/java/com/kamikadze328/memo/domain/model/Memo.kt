@@ -1,5 +1,8 @@
 package com.kamikadze328.memo.domain.model
 
+import androidx.compose.runtime.Immutable
+
+
 /**
  * Represents a memo.
  *
@@ -10,6 +13,7 @@ package com.kamikadze328.memo.domain.model
  * @param reminderLocation The location where the memo should be reminded.
  * @param isDone Indicates whether the memo is marked as done.
  */
+@Immutable
 data class Memo(
     val id: Long,
     val title: String,

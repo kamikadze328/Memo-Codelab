@@ -16,6 +16,8 @@ activityKtx = "1.11.0"
 coroutines = "1.10.2"
 lifecycle = "2.9.4"
 composeBom = "2025.09.01"
+kotlinXCollectionsImmutable = "0.4.0"
+runtimeAnnotationJvm = "1.9.2"
 
 [libraries]
 # AndroidX
@@ -39,6 +41,8 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 # KotlinX
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-collection-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinXCollectionsImmutable" }
+androidx-compose-runtime-annotation = { group = "androidx.compose.runtime", name = "runtime-annotation", version.ref = "runtimeAnnotationJvm" }
 
 #Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -46,6 +50,7 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityKtx" }
 androidx-compose-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
@@ -64,6 +69,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 
 [bundles]
 room = ["androidx-room-runtime", "androidx-room-ktx"]
-coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
-compose = ["androidx-compose-ui", "androidx-compose-material", "androidx-compose-activity", "androidx-compose-lifecycle-viewmodel"]
+compose = ["androidx-compose-ui", "androidx-compose-material", "androidx-compose-activity", "androidx-compose-lifecycle-viewmodel", "androidx-compose-material-icons", "kotlinx-collection-immutable"]
 compose-debug = ["androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview"]

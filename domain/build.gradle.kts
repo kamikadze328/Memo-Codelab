@@ -15,5 +15,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.compose.runtime.annotation)
 }

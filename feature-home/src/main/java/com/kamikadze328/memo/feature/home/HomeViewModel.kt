@@ -1,10 +1,12 @@
 package com.kamikadze328.memo.feature.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.domain.repository.IMemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,33 +20,64 @@ import javax.inject.Inject
 internal class HomeViewModel @Inject constructor(
     private val memoRepository: IMemoRepository
 ) : ViewModel() {
+    companion object {
+        private const val TAG = "HomeViewModel"
+    }
 
-    private var isShowAll = false
-    private val _memos: MutableStateFlow<List<Memo>> = MutableStateFlow(listOf())
-    val memos: StateFlow<List<Memo>> = _memos.asStateFlow()
+    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.EMPTY)
+    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+
+    init {
+        refreshMemos()
+    }
+
+    fun onShowAllClick() {
+        _uiState.value = _uiState.value.copy(shouldShowAll = true)
+
+        refreshMemos()
+    }
+
+    fun onShowOpenClick() {
+        _uiState.value = _uiState.value.copy(shouldShowAll = false)
+
+        refreshMemos()
+    }
 
     /**
      * Loads all memos.
      */
-    fun loadAllMemos() {
-        isShowAll = true
+    private fun loadAllMemos() {
         viewModelScope.launch {
-            _memos.value = memoRepository.getAll()
+            try {
+                _uiState.value = _uiState.value.copy(
+                    memos = memoRepository.getAll()
+                )
+            } catch (e: Throwable) {
+                ensureActive()
+                Log.e(TAG, "Failed to load memos", e)
+            }
         }
     }
 
     /**
      * Loads all open (not done) memos.
      */
-    fun loadOpenMemos() {
-        isShowAll = false
+    private fun loadOpenMemos() {
         viewModelScope.launch {
-            _memos.value = memoRepository.getOpen()
+            try {
+                _uiState.value = _uiState.value.copy(
+                    memos = memoRepository.getOpen()
+                )
+            } catch (e: Throwable) {
+                ensureActive()
+                Log.e(TAG, "Failed to load opened memos", e)
+            }
         }
     }
 
     fun refreshMemos() {
-        if (isShowAll) {
+        if (_uiState.value.shouldShowAll) {
             loadAllMemos()
         } else {
             loadOpenMemos()
@@ -57,12 +90,14 @@ internal class HomeViewModel @Inject constructor(
      * @param memo      - the memo to update.
      * @param isChecked - whether the memo has been checked (marked as done).
      */
-    fun updateMemo(memo: Memo, isChecked: Boolean) {
+    fun onUpdateMemo(memo: Memo, isChecked: Boolean) {
+        // We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
+        if (!isChecked) return
+
         viewModelScope.launch {
-            // We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
-            if (isChecked) {
-                memoRepository.saveMemo(memo.copy(isDone = true))
-            }
+            memoRepository.saveMemo(memo.copy(isDone = true))
+
+            refreshMemos()
         }
     }
 }

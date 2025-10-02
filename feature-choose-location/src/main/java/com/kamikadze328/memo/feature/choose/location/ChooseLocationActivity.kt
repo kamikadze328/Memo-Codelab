@@ -1,15 +1,15 @@
 package com.kamikadze328.memo.feature.choose.location
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import com.kamikadze328.memo.core.ui.theme.AppTheme
 import com.kamikadze328.memo.feature.choose.location.compose.ChooseLocationUi
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class ChooseLocationActivity : AppCompatActivity() {
+class ChooseLocationActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

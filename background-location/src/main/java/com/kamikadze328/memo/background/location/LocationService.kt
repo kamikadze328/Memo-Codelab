@@ -17,7 +17,7 @@ import javax.inject.Inject
 class LocationService : Service() {
     companion object {
         private val isRunning = AtomicBoolean(false)
-        internal fun startService(context: Context) {
+        fun startService(context: Context) {
             if (!context.isFineLocationGranted() ||
                 !context.isPostNotificationsGranted() ||
                 isRunning.get()

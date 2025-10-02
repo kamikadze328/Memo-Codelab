@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="no_location_permissions_warning">Please grant all permissions for the location/notification. It`s necessary for the memo`s location feature to work</string>
+    <string name="home_title">Memo Codelab</string>
+    <string name="action_show_all">SHOW ALL</string>
+    <string name="action_show_open">SHOW OPEN</string>
 </resources>

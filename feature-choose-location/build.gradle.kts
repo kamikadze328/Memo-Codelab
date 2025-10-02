@@ -15,22 +15,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":core-android"))
     implementation(project(":core-ui"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.google.material)
-    implementation(libs.androidx.activity.ktx)
 
     implementation(libs.osmdroid)
 
