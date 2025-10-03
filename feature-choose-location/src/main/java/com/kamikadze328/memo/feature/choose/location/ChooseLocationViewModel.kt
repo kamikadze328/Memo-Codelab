@@ -10,18 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ChooseLocationViewModel @Inject constructor() : ViewModel() {
-    companion object {
-        private val BATUMI_LOCATION = MemoLocation(41.6413, 41.6359)
-        private val DEFAULT_LOCATION = BATUMI_LOCATION
-    }
-
-    private val _data = MutableStateFlow(
-        ChooseLocationUiState(
-            location = DEFAULT_LOCATION,
-            canChoose = false,
-            initialLocation = DEFAULT_LOCATION
-        )
-    )
+    private val _data = MutableStateFlow(ChooseLocationUiState.EMPTY)
     val data: StateFlow<ChooseLocationUiState> = _data.asStateFlow()
 
     fun updateLocation(memoLocation: MemoLocation) {
@@ -34,7 +23,7 @@ internal class ChooseLocationViewModel @Inject constructor() : ViewModel() {
         _data.value = _data.value.copy(
             canChoose = args.canChooseLocation,
             initialLocation = args.location,
-            location = args.location ?: DEFAULT_LOCATION,
+            location = args.location ?: ChooseLocationUiState.DEFAULT_LOCATION,
         )
     }
 }

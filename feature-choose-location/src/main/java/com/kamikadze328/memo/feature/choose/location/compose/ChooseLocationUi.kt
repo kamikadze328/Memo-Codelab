@@ -157,23 +157,33 @@ private fun Map(
                 setMultiTouchControls(true)
                 controller.setZoom(15.0)
                 controller.setCenter(GeoPoint(location.latitude, location.longitude))
-
-                if (uiState.canChoose) {
-                    val receiver = object : MapEventsReceiver {
-                        override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                            p ?: return false
-                            onPick(MemoLocation(p.latitude, p.longitude))
-                            return true
-                        }
-
-                        override fun longPressHelper(p: GeoPoint?) = false
-                    }
-                    overlays.add(MapEventsOverlay(receiver))
-                }
             }.also { mapView = it }
         },
         update = { view ->
-            val p = GeoPoint(location.latitude, location.longitude)
+            mapView = view
+        }
+    )
+
+    LaunchedEffect(uiState.canChoose, mapView, onPick) {
+        val view = mapView ?: return@LaunchedEffect
+        view.overlays.removeAll { it is MapEventsOverlay }
+
+        if (uiState.canChoose) {
+            val receiver = object : MapEventsReceiver {
+                override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                    p ?: return false
+                    onPick(MemoLocation(p.latitude, p.longitude))
+                    return true
+                }
+
+                override fun longPressHelper(p: GeoPoint?) = false
+            }
+            view.overlays.add(MapEventsOverlay(receiver))
+        }
+    }
+    LaunchedEffect(location, mapView) {
+        val p = GeoPoint(location.latitude, location.longitude)
+        mapView?.let { view ->
             marker?.let { view.overlays.remove(it) }
             marker = Marker(view).apply {
                 position = p
@@ -183,7 +193,7 @@ private fun Map(
             view.controller.animateTo(p)
             view.invalidate()
         }
-    )
+    }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle) {
