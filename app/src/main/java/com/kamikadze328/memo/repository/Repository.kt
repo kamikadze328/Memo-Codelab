@@ -4,6 +4,8 @@ import androidx.room.Room
 import android.content.Context
 import androidx.annotation.WorkerThread
 import com.kamikadze328.memo.model.Memo
+import com.kamikadze328.memo.repository.migrations.MIGRATION_1_2
+import kotlinx.coroutines.flow.Flow
 
 private const val DATABASE_NAME: String = "codelab"
 
@@ -15,13 +17,21 @@ internal object Repository : IMemoRepository {
     private lateinit var database: Database
 
     fun initialize(applicationContext: Context) {
-        database = Room.databaseBuilder(applicationContext, Database::class.java, DATABASE_NAME).build()
+        database = Room
+            .databaseBuilder(applicationContext, Database::class.java, DATABASE_NAME)
+            .addMigrations(
+                MIGRATION_1_2,
+            )
+            .build()
     }
 
     @WorkerThread
     override fun saveMemo(memo: Memo) {
         database.getMemoDao().insert(memo)
     }
+
+    @WorkerThread
+    override fun collectOpened(): Flow<List<Memo>> = database.getMemoDao().collectOpened()
 
     @WorkerThread
     override fun getOpen(): List<Memo> = database.getMemoDao().getOpen()

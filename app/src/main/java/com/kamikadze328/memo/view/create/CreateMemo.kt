@@ -1,14 +1,16 @@
 package com.kamikadze328.memo.view.create
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.kamikadze328.memo.R
 import com.kamikadze328.memo.databinding.ActivityCreateMemoBinding
 import com.kamikadze328.memo.utils.extensions.empty
+import com.kamikadze328.memo.view.create.location.ChooseLocationArgs
+import com.kamikadze328.memo.view.create.location.ChooseLocationContract
 
 /**
  * Activity that allows a user to create a new Memo.
@@ -18,12 +20,42 @@ internal class CreateMemo : AppCompatActivity() {
     private lateinit var binding: ActivityCreateMemoBinding
     private lateinit var model: CreateMemoViewModel
 
+    private val chooseLocationLauncher =
+        registerForActivityResult(ChooseLocationContract()) { result ->
+            model.updateMemoLocation(result.location)
+            updateLocationInfo()
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateMemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         model = ViewModelProvider(this)[CreateMemoViewModel::class.java]
+
+        setupClickListeners()
+        initData()
+    }
+
+    private fun initData() {
+        updateLocationInfo()
+    }
+
+    private fun updateLocationInfo() {
+        with(binding.contentCreateMemo) {
+            chooseLocationText.text =
+                model.getMemoLocation()?.let { "${it.latitude}, ${it.longitude}" }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.contentCreateMemo.chooseLocationButton.setOnClickListener {
+            chooseLocationLauncher.launch(
+                ChooseLocationArgs(
+                    location = model.getMemoLocation(),
+                )
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -41,7 +73,7 @@ internal class CreateMemo : AppCompatActivity() {
                 true
             }
 
-            else             -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -56,8 +88,13 @@ internal class CreateMemo : AppCompatActivity() {
                 setResult(RESULT_OK)
                 finish()
             } else {
-                memoTitleContainer.error = getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error = getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                memoTitleContainer.error =
+                    getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
+                memoDescriptionContainer.error =
+                    getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                if (model.hasLocationError()) {
+                    chooseLocationText.text = getString(R.string.memo_location_empty_error)
+                }
             }
         }
     }

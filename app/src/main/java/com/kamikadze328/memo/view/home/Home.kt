@@ -1,22 +1,30 @@
 package com.kamikadze328.memo.view.home
 
+import android.Manifest
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kamikadze328.memo.LocationService
 import com.kamikadze328.memo.R
 import com.kamikadze328.memo.databinding.ActivityHomeBinding
 import com.kamikadze328.memo.model.Memo
+import com.kamikadze328.memo.utils.permissions.isAllPermissionsGranted
 import com.kamikadze328.memo.view.create.CreateMemo
 import com.kamikadze328.memo.view.detail.BUNDLE_MEMO_ID
 import com.kamikadze328.memo.view.detail.ViewMemo
 import kotlinx.coroutines.launch
+
 
 /**
  * The main activity of the app. Shows a list of recorded memos and lets the user add new memos.
@@ -33,12 +41,24 @@ internal class Home : AppCompatActivity() {
         }
     }
 
+    private val locationPermissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions.all { it.value }) {
+                startLocationService()
+            } else {
+                toast(getString(R.string.no_location_permissions_warning))
+                openSettings()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         model = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        requestPermissions()
 
         // Setup the adapter and the recycler view
         setupRecyclerView(initializeAdapter())
@@ -48,6 +68,27 @@ internal class Home : AppCompatActivity() {
             createMemoLauncher.launch(Intent(this@Home, CreateMemo::class.java))
         }
         model.loadOpenMemos()
+    }
+
+    private fun startLocationService() {
+        Intent(applicationContext, LocationService::class.java).apply {
+            startService(this)
+        }
+    }
+
+    private fun requestPermissions() {
+        if (!isAllPermissionsGranted()) {
+            val permissions = buildList {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                add(Manifest.permission.ACCESS_FINE_LOCATION)
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+            locationPermissionsLauncher.launch(permissions.toTypedArray())
+            return
+        }
+        startLocationService()
     }
 
     /**
@@ -121,5 +162,17 @@ internal class Home : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun toast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            .apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+        startActivity(intent)
     }
 }

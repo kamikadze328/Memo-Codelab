@@ -1,6 +1,7 @@
 package com.kamikadze328.memo.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -18,10 +19,8 @@ internal data class Memo(
         var description: String,
         @ColumnInfo(name = "reminderDate")
         var reminderDate: Long,
-        @ColumnInfo(name = "reminderLatitude")
-        var reminderLatitude: Long,
-        @ColumnInfo(name = "reminderLongitude")
-        var reminderLongitude: Long,
         @ColumnInfo(name = "isDone")
-        var isDone: Boolean = false
+        var isDone: Boolean = false,
+        @Embedded
+        val location: MemoLocation? = null,
 )

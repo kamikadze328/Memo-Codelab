@@ -25,6 +25,19 @@ internal object ScopeProvider {
     }
 
     /**
+     * Creates a new coroutine scope with a [SupervisorJob].
+     *
+     * This type of scope is useful when you have a group of coroutines where the failure of one
+     * should not cause the others to be cancelled.
+     *
+     * @param dispatcher The dispatcher used to run the coroutines. Defaults to [Dispatchers.Main].
+     * @return A new [CoroutineScope] with a [SupervisorJob].
+     */
+    fun supervisorScope(dispatcher: CoroutineDispatcher = Dispatchers.Main): CoroutineScope {
+        return CoroutineScope(dispatcher + SupervisorJob())
+    }
+
+    /**
      * Cancel a coroutine scope => Cancel all running jobs created from the given scope.
      * Call cancel whenever the jobs don't have to run anymore, e.g: when the activity gets destroyed, when a fragment is detached, when a component stops
      * running etc.
