@@ -1,11 +1,13 @@
 package com.kamikadze328.memo.feature.memo.details
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.domain.model.MemoLocation
 import com.kamikadze328.memo.domain.repository.IMemoRepository
+import com.kamikadze328.memo.navigation.memo.details.MemoDetailsArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,17 +20,21 @@ import javax.inject.Inject
  * ViewModel for matching CreateMemo view. Handles user interactions.
  */
 @HiltViewModel
-internal class MemoDetailsViewModel @Inject constructor(
+class MemoDetailsViewModel @Inject constructor(
     private val repository: IMemoRepository,
     @param:ApplicationContext
-    private val applicationContext: Context
+    private val applicationContext: Context,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
     private var _uiState = MutableStateFlow(MemoDetailsUiState.EMPTY)
     val uiState: StateFlow<MemoDetailsUiState> = _uiState.asStateFlow()
 
+    init {
+        initArgs(args = MemoDetailsArgs.from(savedStateHandle))
+    }
+
     fun initArgs(args: MemoDetailsArgs) {
-        when (args.openingType) {
+        when (val openingType = args.openingType) {
             is MemoDetailsArgs.OpeningType.CreateNew -> {
                 _uiState.value = MemoDetailsUiState.EMPTY.copy(
                     canEdit = true,
@@ -40,7 +46,7 @@ internal class MemoDetailsViewModel @Inject constructor(
                 viewModelScope.launch {
                     _uiState.value = MemoDetailsUiState.EMPTY.copy(
                         canEdit = false,
-                        memo = repository.getMemoById(args.openingType.memoId),
+                        memo = repository.getMemoById(openingType.memoId),
                     )
                 }
             }

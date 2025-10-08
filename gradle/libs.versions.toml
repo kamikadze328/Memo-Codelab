@@ -4,7 +4,6 @@ kotlin = "2.2.20"
 ksp = "2.2.20-2.0.2"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
-constraintlayout = "2.2.1"
 material = "1.13.0"
 room = "2.8.1"
 osmdroid = "6.1.20"
@@ -18,12 +17,14 @@ lifecycle = "2.9.4"
 composeBom = "2025.09.01"
 kotlinXCollectionsImmutable = "0.4.0"
 runtimeAnnotationJvm = "1.9.2"
+navigation = "2.9.5"
+navigationHilt = "1.3.0"
+serialization = "1.9.0"
 
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -40,7 +41,7 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 # KotlinX
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-collection-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinXCollectionsImmutable" }
-androidx-compose-runtime-annotation = { group = "androidx.compose.runtime", name = "runtime-annotation", version.ref = "runtimeAnnotationJvm" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 
 #Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -51,6 +52,12 @@ androidx-compose-material = { group = "androidx.compose.material", name = "mater
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityKtx" }
 androidx-compose-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-compose-runtime-annotation = { group = "androidx.compose.runtime", name = "runtime-annotation", version.ref = "runtimeAnnotationJvm" }
+
+#Navigation
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+navigation-hilt = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "navigationHilt" }
+
 
 # 3-rd party
 osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }
@@ -58,14 +65,14 @@ osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "o
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
 room = ["androidx-room-runtime", "androidx-room-ktx"]
 compose = ["androidx-compose-ui", "androidx-compose-material", "androidx-compose-activity", "androidx-compose-lifecycle-viewmodel", "androidx-compose-material-icons", "kotlinx-collection-immutable"]
 compose-debug = ["androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview"]
+navigation = ["navigation-compose", "navigation-hilt", "kotlinx-serialization-json"]

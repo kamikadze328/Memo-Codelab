@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun AppTheme(
+fun MemoTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {

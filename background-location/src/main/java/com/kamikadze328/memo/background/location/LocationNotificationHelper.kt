@@ -61,6 +61,7 @@ internal class LocationNotificationHelper @Inject constructor(
         val uri = "codelab://com.kamikadze328.memo/detail?id=$memoId".toUri()
 
         val viewIntent = Intent(Intent.ACTION_VIEW, uri).apply {
+            setPackage(applicationContext.packageName)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
 

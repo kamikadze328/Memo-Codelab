@@ -29,5 +29,6 @@ include(
     ":background-location",
     ":feature-home",
     ":feature-memo-details",
-    ":feature-choose-location"
+    ":feature-choose-location",
+    ":navigation"
 )

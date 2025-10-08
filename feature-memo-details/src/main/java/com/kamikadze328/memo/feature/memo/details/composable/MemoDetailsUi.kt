@@ -1,6 +1,5 @@
 package com.kamikadze328.memo.feature.memo.details.composable
 
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,34 +22,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.kamikadze328.memo.core.ui.MemoAppBar
-import com.kamikadze328.memo.feature.choose.location.ChooseLocationArgs
-import com.kamikadze328.memo.feature.choose.location.ChooseLocationContract
-import com.kamikadze328.memo.feature.memo.details.MemoDetailsArgs
 import com.kamikadze328.memo.feature.memo.details.MemoDetailsUiState
 import com.kamikadze328.memo.feature.memo.details.MemoDetailsViewModel
 import com.kamikadze328.memo.feature.memo.details.R
+import com.kamikadze328.memo.navigation.CollectResult
+import com.kamikadze328.memo.navigation.choose.location.ChooseLocationArgs
+import com.kamikadze328.memo.navigation.choose.location.ChooseLocationResult
 
 
 @Composable
-internal fun MemoDetailsUi(
-    viewModel: MemoDetailsViewModel = viewModel(),
-    args: MemoDetailsArgs,
+fun MemoDetailsUi(
+    viewModel: MemoDetailsViewModel = hiltViewModel(),
+    navController: NavController,
+    onChooseLocation: (ChooseLocationArgs) -> Unit,
     onFinish: () -> Unit,
 ) {
-    val chooseLocationLauncher = rememberLauncherForActivityResult(
-        ChooseLocationContract()
-    ) { result ->
-        viewModel.onNewMemoLocation(result.location)
-    }
-
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     MemoDetailsUi(
         uiState = uiState.value,
         onChooseLocationClick = {
-            chooseLocationLauncher.launch(
+            onChooseLocation(
                 ChooseLocationArgs(
                     location = uiState.value.memo.reminderLocation,
                     canChooseLocation = uiState.value.canEdit,
@@ -62,13 +57,14 @@ internal fun MemoDetailsUi(
         onNewDescriptionValue = viewModel::onNewDescriptionValue,
     )
 
-    LaunchedEffect(args) {
-        viewModel.initArgs(args)
-    }
     LaunchedEffect(uiState.value.shouldFinish) {
         if (uiState.value.shouldFinish) {
             onFinish()
         }
+    }
+
+    navController.CollectResult<ChooseLocationResult> {
+        viewModel.onNewMemoLocation(it.location)
     }
 }
 

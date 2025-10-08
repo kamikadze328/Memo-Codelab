@@ -37,32 +37,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kamikadze328.memo.background.location.LocationService
 import com.kamikadze328.memo.core.android.permissions.isAllPermissionsGranted
 import com.kamikadze328.memo.core.ui.MemoAppBar
-import com.kamikadze328.memo.core.ui.theme.AppTheme
+import com.kamikadze328.memo.core.ui.theme.MemoTheme
 import com.kamikadze328.memo.domain.model.Memo
 import com.kamikadze328.memo.feature.home.HomeUiState
 import com.kamikadze328.memo.feature.home.HomeViewModel
 import com.kamikadze328.memo.feature.home.R
-import com.kamikadze328.memo.feature.memo.details.MemoDetailsArgs
-import com.kamikadze328.memo.feature.memo.details.MemoDetailsContract
+import com.kamikadze328.memo.navigation.memo.details.MemoDetailsArgs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun HomeUi(
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateDetailsMemo: (MemoDetailsArgs) -> Unit,
 ) {
     val context = LocalContext.current
-    val createMemoLauncher = rememberLauncherForActivityResult(MemoDetailsContract()) { isSuccess ->
-        if (isSuccess) {
-            viewModel.refreshMemos()
-        }
-    }
-    val viewMemoLauncher = rememberLauncherForActivityResult(MemoDetailsContract()) {}
 
     val permissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -83,14 +77,14 @@ internal fun HomeUi(
     HomeUi(
         uiState = uiState.value,
         onClickMemo = {
-            viewMemoLauncher.launch(
+            navigateDetailsMemo(
                 MemoDetailsArgs(
                     openingType = MemoDetailsArgs.OpeningType.View(it.id)
                 )
             )
         },
         onAddMemo = {
-            createMemoLauncher.launch(
+            navigateDetailsMemo(
                 MemoDetailsArgs(
                     openingType = MemoDetailsArgs.OpeningType.CreateNew
                 )
@@ -253,7 +247,7 @@ private fun MemoRow(
 @Composable
 @Preview
 private fun Preview() {
-    AppTheme {
+    MemoTheme {
         HomeUi(
             uiState = HomeUiState(
                 memos = listOf(

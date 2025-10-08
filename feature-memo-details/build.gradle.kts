@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -20,6 +20,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":core-ui"))
+    implementation(project(":navigation"))
     implementation(project(":feature-choose-location"))
 
     implementation(libs.hilt.android)
@@ -28,4 +29,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
+
+    implementation(libs.bundles.navigation)
 }

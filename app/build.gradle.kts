@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -47,6 +49,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core-android"))
     implementation(project(":core-ui"))
+    implementation(project(":navigation"))
     implementation(project(":background-location"))
     implementation(project(":feature-home"))
     implementation(project(":feature-memo-details"))
@@ -56,6 +59,12 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.androidx.lifecycle.process)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.bundles.compose.debug)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation(libs.bundles.navigation)
 }

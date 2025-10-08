@@ -32,19 +32,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kamikadze328.memo.core.ui.MemoAppBar
-import com.kamikadze328.memo.core.ui.theme.AppTheme
+import com.kamikadze328.memo.core.ui.theme.MemoTheme
 import com.kamikadze328.memo.domain.model.MemoLocation
-import com.kamikadze328.memo.feature.choose.location.ChooseLocationArgs
-import com.kamikadze328.memo.feature.choose.location.ChooseLocationResult
 import com.kamikadze328.memo.feature.choose.location.ChooseLocationUiState
 import com.kamikadze328.memo.feature.choose.location.ChooseLocationViewModel
 import com.kamikadze328.memo.feature.choose.location.R
+import com.kamikadze328.memo.navigation.choose.location.ChooseLocationResult
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -55,8 +54,7 @@ import org.osmdroid.views.overlay.Marker
 
 @Composable
 internal fun ChooseLocationUi(
-    viewModel: ChooseLocationViewModel = viewModel(),
-    args: ChooseLocationArgs,
+    viewModel: ChooseLocationViewModel = hiltViewModel(),
     onBack: (ChooseLocationResult) -> Unit,
 ) {
     val uiState by viewModel.data.collectAsStateWithLifecycle()
@@ -75,10 +73,6 @@ internal fun ChooseLocationUi(
             onBack(ChooseLocationResult(location = uiState.location))
         },
     )
-
-    LaunchedEffect(args) {
-        viewModel.initArgs(args)
-    }
 }
 
 @Composable
@@ -286,7 +280,7 @@ private fun MapActions(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
+    MemoTheme {
         ChooseLocationUi(
             uiState = ChooseLocationUiState(
                 location = MemoLocation(41.6413, 41.6359),

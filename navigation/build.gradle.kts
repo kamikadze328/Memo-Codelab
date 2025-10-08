@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -20,9 +21,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.google.material)
-
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.compose)
-    debugImplementation(libs.bundles.compose.debug)
+    implementation(project(":domain"))
+    implementation(libs.bundles.navigation)
 }

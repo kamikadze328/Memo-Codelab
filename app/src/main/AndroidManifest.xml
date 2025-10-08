@@ -21,21 +21,10 @@
         <meta-data
             android:name="osmdroid.userAgent"
             android:value="${applicationId}" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="com.kamikadze328.memo.background.location.OsmdroidInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
         <activity
-            android:name=".feature.home.HomeActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,12 +40,7 @@
                     android:path="/home"
                     android:scheme="codelab" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".feature.memo.details.MemoDetailsActivity"
-            android:exported="true"
-            android:parentActivityName=".feature.home.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -69,12 +53,15 @@
                     android:scheme="codelab" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".feature.choose.location.ChooseLocationActivity"
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            android:label="@string/choose_location_title"
-            android:parentActivityName=".feature.memo.details.MemoDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            tools:node="merge">
+            <meta-data
+                android:name="com.kamikadze328.memo.background.location.OsmdroidInitializer"
+                android:value="androidx.startup" />
+        </provider>
 
         <service
             android:name=".background.location.LocationService"
