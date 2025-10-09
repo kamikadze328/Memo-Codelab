@@ -1,43 +1,30 @@
 package com.kamikadze328.memo
 
 import android.location.Location
-import com.kamikadze328.memo.model.Memo
-import com.kamikadze328.memo.model.MemoLocation
 import com.kamikadze328.memo.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 internal class LocationUpdateProcessor(
     private val repository: Repository,
+    private val notificationHelper: LocationNotificationHelper,
 ) {
     companion object {
-        private const val MAX_DISTANCE_TO_LOCATION_METERS = 200
+        private const val MAX_DISTANCE_TO_LOCATION_METERS = 200.0
     }
 
-    suspend fun onLocationUpdate(
-        lastUserLocation: Location,
-        notifyLocationMemoNearby: (Memo) -> Unit
-    ) {
-        val openedMemos = withContext(Dispatchers.IO) {
-            repository.getOpen()
-        }
-        openedMemos
-            .filter { it.shouldNotifyMemoNearby(lastUserLocation) }
-            .forEach { notifyLocationMemoNearby(it) }
-    }
-
-    private fun Memo.shouldNotifyMemoNearby(lastUserLocation: Location): Boolean {
-        val memoLocation = location ?: return false
-
-        val userDistanceToMemo = lastUserLocation.distanceTo(memoLocation.toLocation())
-        return userDistanceToMemo < MAX_DISTANCE_TO_LOCATION_METERS
-    }
-
-    private fun MemoLocation.toLocation(): Location {
-        return Location("").apply {
-            latitude = this@toLocation.latitude
-            longitude = this@toLocation.longitude
+    suspend fun onLocationUpdate(lastUserLocation: Location) {
+        val memos = withContext(Dispatchers.IO) {
+            repository
+                .findNearMemoByFlatDistance(
+                    latitude = lastUserLocation.latitude,
+                    longitude = lastUserLocation.longitude,
+                    radiusMeters = MAX_DISTANCE_TO_LOCATION_METERS,
+                )
         }
 
+        memos.forEach {
+            notificationHelper.showMemoLocatedNotification(it)
+        }
     }
 }

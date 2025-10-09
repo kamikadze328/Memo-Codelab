@@ -9,7 +9,7 @@ import com.kamikadze328.memo.model.Memo
  */
 @Database(
     entities = [Memo::class],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 internal abstract class Database : RoomDatabase() {

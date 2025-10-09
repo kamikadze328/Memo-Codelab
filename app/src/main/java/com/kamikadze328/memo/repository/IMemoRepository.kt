@@ -32,4 +32,17 @@ internal interface IMemoRepository {
      * @return the memo whose id matches the given id.
      */
     fun getMemoById(id: Long): Memo
+
+    /**
+     * @param latitude The latitude of the location.
+     * @param longitude The longitude of the location.
+     * @param radiusMeters The radius of search in meters.
+     *
+     * @return all nearby memos.
+     */
+    suspend fun findNearMemoByFlatDistance(
+        latitude: Double,
+        longitude: Double,
+        radiusMeters: Double
+    ): List<Memo>
 }

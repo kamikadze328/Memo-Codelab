@@ -15,7 +15,7 @@ import com.kamikadze328.memo.view.create.location.ChooseLocationContract
 /**
  * Activity that allows a user to create a new Memo.
  */
-internal class CreateMemo : AppCompatActivity() {
+class CreateMemo : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateMemoBinding
     private lateinit var model: CreateMemoViewModel
