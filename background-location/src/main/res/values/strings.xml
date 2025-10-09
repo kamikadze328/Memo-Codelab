@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_notification_channel">Location service</string>
+    <string name="memo_location_notification_channel">Memos nearby</string>
+    <string name="location_notification_title">Location Service</string>
+    <string name="location_notification_text">Looking for your memos nearby</string>
+</resources>

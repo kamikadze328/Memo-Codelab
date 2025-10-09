@@ -9,3 +9,5 @@
 .externalNativeBuild
 .idea
 app/local.properties
+.kotlin
+**/build
