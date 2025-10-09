@@ -76,6 +76,17 @@ internal class Home : AppCompatActivity() {
         }
     }
 
+    /**
+     * We request location permissions at app startup instead of when the map is opened
+     * because the location service must start as soon as the app launches.
+     * This service handles background updates and reminders, and it needs location access
+     * even before the map screen is shown. Requesting permissions early ensures that:
+     * 1) The service can be (re)started immediately if it wasn't running previously.
+     * 2) If the permissions were revoked by the user, the app can detect it early
+     *    and reinitialize the service once permissions are granted again.
+     * 3) The map and other location-dependent features are ready to use without delays.
+     *
+     */
     private fun requestPermissions() {
         if (!isAllPermissionsGranted()) {
             val permissions = buildList {
