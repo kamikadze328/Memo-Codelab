@@ -1,22 +1,19 @@
 package com.kamikadze328.memo
 
 import android.location.Location
-import com.kamikadze328.memo.model.Memo
 import com.kamikadze328.memo.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 internal class LocationUpdateProcessor(
     private val repository: Repository,
+    private val notificationHelper: LocationNotificationHelper,
 ) {
     companion object {
         private const val MAX_DISTANCE_TO_LOCATION_METERS = 200.0
     }
 
-    suspend fun onLocationUpdate(
-        lastUserLocation: Location,
-        notifyLocationMemoNearby: (Memo) -> Unit
-    ) {
+    suspend fun onLocationUpdate(lastUserLocation: Location) {
         val memos = withContext(Dispatchers.IO) {
             repository
                 .findNearMemoByFlatDistance(
@@ -26,6 +23,8 @@ internal class LocationUpdateProcessor(
                 )
         }
 
-        memos.forEach { notifyLocationMemoNearby(it) }
+        memos.forEach {
+            notificationHelper.showMemoLocatedNotification(it)
+        }
     }
 }

@@ -42,6 +42,7 @@ class LocationService : Service() {
     private val locationProcessor: LocationUpdateProcessor by lazy {
         LocationUpdateProcessor(
             repository = Repository,
+            notificationHelper = notificationHelper,
         )
     }
     private val locationCallback by lazy {
@@ -51,10 +52,7 @@ class LocationService : Service() {
 
                 coroutineScope.launch {
                     try {
-                        locationProcessor.onLocationUpdate(
-                            lastUserLocation = lastLocation,
-                            notifyLocationMemoNearby = notificationHelper::showMemoLocatedNotification
-                        )
+                        locationProcessor.onLocationUpdate(lastLocation)
                     } catch (e: Throwable) {
                         coroutineScope.ensureActive()
                         Log.e(TAG, "Failed to process location update", e)
