@@ -3,12 +3,22 @@ package com.kamikadze328.memo.model
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Represents a memo.
  */
-@Entity(tableName = "memo")
+@Entity(
+    tableName = "memo",
+    indices = [
+        Index(value = ["isDone"], name = "idx_memo_isDone"),
+        Index(
+            value = ["isDone", "reminderLatitude", "reminderLongitude"],
+            name = "idx_memo_isDone_lat_lon"
+        )
+    ],
+)
 internal data class Memo(
         @ColumnInfo(name = "id")
         @PrimaryKey(autoGenerate = true)

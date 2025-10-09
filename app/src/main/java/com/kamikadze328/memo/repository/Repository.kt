@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import androidx.room.Room
 import com.kamikadze328.memo.model.Memo
 import com.kamikadze328.memo.repository.migrations.MIGRATION_1_2
+import com.kamikadze328.memo.repository.migrations.MIGRATION_2_3
 import kotlinx.coroutines.flow.Flow
 
 private const val DATABASE_NAME: String = "codelab"
@@ -21,6 +22,7 @@ internal object Repository : IMemoRepository {
             .databaseBuilder(applicationContext, Database::class.java, DATABASE_NAME)
             .addMigrations(
                 MIGRATION_1_2,
+                MIGRATION_2_3,
             )
             .build()
     }

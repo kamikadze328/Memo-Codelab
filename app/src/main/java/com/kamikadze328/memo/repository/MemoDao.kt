@@ -44,7 +44,18 @@ internal interface MemoDao {
     fun getMemoById(memoId: Long): Memo
 
     /**
+     * Calculates the squared flat-Earth distance between two latitude/longitude points.
      *
+     * Each degree of latitude is approximately 111,320 meters everywhere on Earth,
+     * while each degree of longitude equals 111,320 * cos(latitude) meters.
+     *
+     * We multiply coordinate differences by those scale factors to convert them to meters,
+     * then apply the Pythagorean theorem (Δx² + Δy²). The query keeps only points
+     * whose squared distance is less than or equal to (radiusMeters)².
+     *
+     * This approach assumes a locally flat Earth surface, which is accurate enough
+     * for short distances (e.g. ≤ 1–2 km) and avoids expensive trigonometric functions.
+     * *
      * @param lat The latitude of the location.
      * @param lon The longitude of the location.
      * @param latCos The cosine of the latitude.
