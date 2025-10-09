@@ -15,10 +15,6 @@ data class MemoDetailsArgs(
         val typeMap = mapOf(typeOf<MemoDetailsArgs>() to serializableType<MemoDetailsArgs>())
 
         fun from(savedStateHandle: SavedStateHandle): MemoDetailsArgs {
-            savedStateHandle.get<Long?>("memoId")?.let { deepLinkMemoId ->
-                return MemoDetailsArgs(openingType = OpeningType.View(deepLinkMemoId))
-            }
-
             return savedStateHandle.toRoute<MemoDetails>(typeMap).args
         }
     }

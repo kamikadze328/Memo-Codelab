@@ -1,5 +1,6 @@
 package com.kamikadze328.memo.feature.memo.details.composable
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -29,18 +30,21 @@ fun NavGraphBuilder.registerCreateGraph(navController: NavController) {
             navDeepLink { uriPattern = "codelab://com.kamikadze328.memo/detail?id={memoId}" }
         )
     ) { backStackEntry ->
-        val deepLinkMemoId = backStackEntry.savedStateHandle.get<String>("memoId")?.toLongOrNull()
-        if (deepLinkMemoId != null) {
-            // TODO
-            navController.navigate(Home)
-            navController.navigate(
-                MemoDetails(MemoDetailsArgs(OpeningType.View(deepLinkMemoId)))
-            ) {
-                popUpTo(Home) { inclusive = false }
-                launchSingleTop = true
+        LaunchedEffect(backStackEntry) {
+            val deepLinkMemoId =
+                backStackEntry.savedStateHandle.get<String>("memoId")?.toLongOrNull()
+            val args = deepLinkMemoId?.let { MemoDetailsArgs(OpeningType.View(it)) }
+
+            if (args == null) {
+                navController.navigate(Home) {
+                    launchSingleTop = true
+                    popUpTo(MemoDetailsDeepLink) { inclusive = true }
+                }
+            } else {
+                navController.navigate(MemoDetails(args)) {
+                    popUpTo(MemoDetailsDeepLink) { inclusive = true }
+                }
             }
-        } else {
-            navController.navigate(Home)
         }
     }
 }
